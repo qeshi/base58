@@ -89,3 +89,17 @@
   "True iff a checksum-encoded string (key/address) has a valid checksum."
   [s]
   (-> s decode check))
+
+
+(defn bytes->int [bytes]
+  "Converts a byte array into an integer."
+  (->>
+   bytes
+   (map (partial format "%02x"))
+   (apply (partial str "0x"))
+   read-string))
+
+
+(defn to-id [n]
+  (str "JT_" (int-to-base58 n 0))
+  )
