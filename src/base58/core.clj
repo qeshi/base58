@@ -5,6 +5,41 @@
 
 ;; The Bitcoin base58 alphabet
 (def code-string "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz")
+(def base58-alphabet "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz")
+
+
+(defn qeshi-int-to-base58
+  [num]
+  (loop [acc []
+         n num
+         ]
+    (if (pos? n)
+      (let [index (rem n 58)
+            string (nth base58-alphabet index)]
+        (recur
+         (cons string acc)
+         (quot n 58)
+         )
+        )
+      (apply str acc)
+      )
+    )
+  )
+
+(defn qeshi-base58-to-number
+  [string]
+
+  (when (subset? (set string) (set base58-alphabet) )
+    (loop [result 0
+           s string
+           ]
+      (if (seq s)
+        (recur (+ (*' result 58) (.indexOf base58-alphabet (str (first s))))
+               (rest s))
+        result
+        )
+      ))
+  )
 
 (defn int-to-base58
   "Encodes an integer into a base58 string."
@@ -89,7 +124,6 @@
   "True iff a checksum-encoded string (key/address) has a valid checksum."
   [s]
   (-> s decode check))
-
 
 (defn bytes->int [bytes]
   "Converts a byte array into an integer."
