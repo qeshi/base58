@@ -137,3 +137,35 @@
 (defn to-id [n]
   (str "JT_" (int-to-base58 n 0))
   )
+
+
+
+(def example-transaction
+  [
+   {:concept/id "TEMP_ID_1"
+    :concept/description "apa"}
+
+   {:concept/id "TEMP_ID_2"
+    :concept/description "banan"}
+
+
+
+   ]
+
+  )
+
+(def counter (atom 0))
+(defn get-next []
+  (swap! counter inc)
+  )
+
+
+(defn replace-temp-id-with-base58-id [n]
+  (if  (and (string? n) (.startsWith n "TEMP_ID_"))
+    (str "JT_" (qeshi-int-to-base58 (get-next)))
+    n
+    )
+  )
+
+;; (clojure.walk/prewalk replace-temp-id-with-base58-id example-transaction)
+
